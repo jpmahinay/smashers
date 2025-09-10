@@ -1,0 +1,7 @@
+id,name,email,password,role,status,racket,tension,rating,partnerId
+admin1,Admin User,admin@smashers.com,admin123,Admin,Approved,Yonex Astrox 99,26 lbs,1600,
+user1,Jane Doe,jane@example.com,password123,Player,Approved,Yonex Astrox 88S,24 lbs,1500,user2
+user2,John Smith,john@example.com,password123,Player,Approved,Victor Thruster K9900,25 lbs,1520,user1
+user3,Alice Wong,alice@example.com,password123,Player,Approved,Li-Ning Aeronaut 9000,23 lbs,1480,
+user4,Bob Chen,bob@example.com,password123,Player,Approved,Yonex Duora 10,26 lbs,1530,
+user5,Emma Liu,emma@example.com,password123,Player,Pending,Victor Jetspeed S12,24 lbs,1500,
