@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SMASHERS – The Ultimate Badminton Hub</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <header class="bg-surface shadow-sm">
+      <div class="container flex items-center justify-between py-16">
+        <div class="logo-container">
+          <div class="logo">
+            <div class="shuttlecock-icon">🏸</div>
+            <div class="logo-text">
+              <span class="logo-main">SMASHERS</span>
+              <span class="logo-sub">BADMINTON CLUB</span>
+            </div>
+          </div>
+        </div>
+        <nav class="flex gap-16" id="navbar">
+          <button class="btn btn--secondary hidden nav-btn" data-section="register-section" id="nav-register">Register</button>
+          <button class="btn btn--secondary hidden nav-btn" data-section="login-section" id="nav-login">Login</button>
+          <button class="btn btn--secondary hidden nav-btn" data-section="dashboard-section" id="nav-dashboard">Dashboard</button>
+          <button class="btn btn--secondary hidden nav-btn" data-section="approval-section" id="nav-approval">User Approvals</button>
+          <button class="btn btn--secondary hidden nav-btn" data-section="attendance-section" id="nav-attendance">Attendance</button>
+          <button class="btn btn--secondary hidden nav-btn" data-section="game-section" id="nav-game">Create Game</button>
+          <button class="btn btn--secondary hidden nav-btn" data-section="matches-section" id="nav-matches">Ongoing Matches</button>
+          <button class="btn btn--secondary hidden nav-btn" data-section="rank-player-section" id="nav-rank-players">Player Rankings</button>
+          <button class="btn btn--secondary hidden nav-btn" data-section="rank-couples-section" id="nav-rank-couples">Couple Rankings</button>
+          <button class="btn btn--outline hidden" id="btn-logout">Logout</button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container py-16 flex flex-col gap-32">
+      <!-- Register -->
+      <section id="register-section" class="hidden">
+        <div class="card max-w-md mx-auto">
+          <div class="card__header">
+            <h2 class="text-xl">Player Registration</h2>
+          </div>
+          <div class="card__body">
+            <form id="register-form" class="flex flex-col gap-16">
+              <div class="form-group">
+                <label class="form-label" for="reg-name">Name</label>
+                <input id="reg-name" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-email">Email</label>
+                <input id="reg-email" type="email" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-password">Password</label>
+                <input id="reg-password" type="password" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-racket">Racket Model</label>
+                <input id="reg-racket" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-tension">String Tension (lbs)</label>
+                <input id="reg-tension" class="form-control" />
+              </div>
+              <div class="flex gap-16 justify-between">
+                <button type="submit" class="btn btn--primary">Submit</button>
+                <button type="button" class="btn btn--secondary" id="btn-reg-cancel">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Login -->
+      <section id="login-section" class="hidden">
+        <div class="card max-w-md mx-auto">
+          <div class="card__header">
+            <h2 class="text-xl">Login</h2>
+          </div>
+          <div class="card__body">
+            <form id="login-form" class="flex flex-col gap-16">
+              <div class="form-group">
+                <label class="form-label" for="login-email">Email</label>
+                <input id="login-email" type="email" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="login-password">Password</label>
+                <input id="login-password" type="password" required class="form-control" />
+              </div>
+              <div class="flex gap-16 justify-between">
+                <button type="submit" class="btn btn--primary">Login</button>
+                <button type="button" class="btn btn--secondary" id="btn-login-cancel">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dashboard -->
+      <section id="dashboard-section" class="hidden">
+        <h2 class="text-xl mb-8">Welcome, <span id="dash-user-name"></span>!</h2>
+        <div class="flex gap-16 flex-wrap">
+          <button class="btn btn--primary nav-btn" data-section="matches-section">View Ongoing Matches</button>
+          <button class="btn btn--primary nav-btn" data-section="rank-player-section">Player Rankings</button>
+          <button class="btn btn--primary nav-btn" data-section="rank-couples-section">Couple Rankings</button>
+        </div>
+      </section>
+
+      <!-- Admin Approval -->
+      <section id="approval-section" class="hidden">
+        <h2 class="text-xl mb-8">Pending User Approvals</h2>
+        <div class="card">
+          <div class="card__body">
+            <table class="w-full" id="approval-table">
+              <thead>
+                <tr>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">Email</th>
+                  <th class="text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Attendance -->
+      <section id="attendance-section" class="hidden">
+        <h2 class="text-xl mb-8">Attendance – <span id="attendance-date"></span></h2>
+        <form id="attendance-form" class="card">
+          <div class="card__body flex flex-col gap-8" id="attendance-list"></div>
+          <div class="card__footer flex justify-end gap-16">
+            <button type="submit" class="btn btn--primary">Save</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Game Creation -->
+      <section id="game-section" class="hidden">
+        <h2 class="text-xl mb-8">Create Doubles Game</h2>
+        <form id="game-form" class="card max-w-lg">
+          <div class="card__body flex flex-col gap-16">
+            <div class="form-group">
+              <label class="form-label">Team A – Player 1</label>
+              <select id="teamA1" class="form-control"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Team A – Player 2</label>
+              <select id="teamA2" class="form-control"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Team B – Player 1</label>
+              <select id="teamB1" class="form-control"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Team B – Player 2</label>
+              <select id="teamB2" class="form-control"></select>
+            </div>
+          </div>
+          <div class="card__footer flex gap-16 justify-end">
+            <button type="submit" class="btn btn--primary">Create Game</button>
+            <button type="button" class="btn btn--secondary" id="btn-game-cancel">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Ongoing Matches -->
+      <section id="matches-section" class="hidden">
+        <h2 class="text-xl mb-8">Ongoing Matches</h2>
+        <div class="flex flex-col gap-16" id="matches-list"></div>
+      </section>
+
+      <!-- Player Rankings -->
+      <section id="rank-player-section" class="hidden">
+        <h2 class="text-xl mb-8">Player Rankings</h2>
+        <div class="chart-container" style="position: relative; height: 400px;">
+          <canvas id="playerRankChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Couple Rankings -->
+      <section id="rank-couples-section" class="hidden">
+        <h2 class="text-xl mb-8">Couple Rankings</h2>
+        <div class="chart-container" style="position: relative; height: 400px;">
+          <canvas id="coupleRankChart"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
