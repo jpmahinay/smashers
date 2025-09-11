@@ -1,239 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SMASHERS – The Ultimate Badminton Hub</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  </head>
-  <body>
-    <header class="bg-surface shadow-sm">
-      <div class="container flex items-center justify-between py-16">
-        <div class="logo-container">
-          <div class="logo">
-            <div class="shuttlecock-icon">🏸</div>
-            <div class="logo-text">
-              <span class="logo-main">SMASHERS</span>
-              <span class="logo-sub">BADMINTON CLUB</span>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMASHERS Badminton Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>SMASHERS</h1>
+                <span>Badminton Portal</span>
             </div>
-          </div>
-        </div>
-        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open navigation menu" aria-expanded="false">
-            <svg class="icon-menu" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-            <svg class="icon-close hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-        <nav class="flex gap-16" id="navbar">
-          <button class="btn btn--secondary hidden nav-btn" data-section="register-section" id="nav-register">Register</button>
-          <button class="btn btn--secondary hidden nav-btn" data-section="login-section" id="nav-login">Login</button>
-          <button class="btn btn--secondary hidden nav-btn" data-section="dashboard-section" id="nav-dashboard">Dashboard</button>
-          <!-- Admin Links -->
-          <button class="btn btn--secondary hidden nav-btn" data-section="approval-section" id="nav-approval">User Approvals</button>
-          <button class="btn btn--secondary hidden nav-btn" data-section="attendance-section" id="nav-attendance">Attendance</button>
-          <button class="btn btn--secondary hidden nav-btn" data-section="game-section" id="nav-game">Create Game</button>
-          <button class="btn btn--secondary hidden nav-btn" data-section="couples-section" id="nav-couples">Manage Couples</button>
-          <!-- Public Links -->
-          <button class="btn btn--secondary hidden nav-btn" data-section="matches-section" id="nav-matches">Ongoing Matches</button>
-          <button class="btn btn--secondary hidden nav-btn" data-section="history-section" id="nav-history">Match History</button>
-          <button class="btn btn--secondary hidden nav-btn" data-section="rank-player-section" id="nav-rank-players">Player Rankings</button>
-          <button class="btn btn--secondary hidden nav-btn" data-section="rank-couples-section" id="nav-rank-couples">Couple Rankings</button>
-          <button class="btn btn--outline hidden" id="btn-logout">Logout</button>
+            <ul class="nav-links">
+                <li><a href="#" id="nav-home">Home</a></li>
+                <li><a href="#" id="nav-login">Login</a></li>
+                <li><a href="#" id="nav-register">Register</a></li>
+                <li><a href="#" id="nav-profile" style="display: none;">My Profile</a></li>
+                <li><a href="#" id="nav-matches">Ongoing Matches</a></li>
+                <li><a href="#" id="nav-player-rankings">Player Rankings</a></li>
+                <li><a href="#" id="nav-couple-rankings">Couple Rankings</a></li>
+                
+                <!-- Admin Links (hidden by default) -->
+                <li><a href="#" id="nav-admin-dashboard" style="display: none;">Admin Dashboard</a></li>
+                <li><a href="#" id="nav-attendance" style="display: none;">Attendance</a></li>
+                <li><a href="#" id="nav-create-game" style="display: none;">Create Game</a></li>
+                
+                <li><a href="#" id="nav-logout" style="display: none;">Logout</a></li>
+            </ul>
         </nav>
-      </div>
     </header>
 
-    <main class="container py-16 flex flex-col gap-32">
-      <!-- Register -->
-      <section id="register-section" class="hidden">
-        <div class="card max-w-md mx-auto">
-          <div class="card__header">
-            <h2 class="text-xl">Player Registration</h2>
-          </div>
-          <div class="card__body">
-            <form id="register-form" class="flex flex-col gap-16">
-              <div class="form-group">
-                <label class="form-label" for="reg-name">Name</label>
-                <input id="reg-name" required class="form-control" />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="reg-email">Email</label>
-                <input id="reg-email" type="email" required class="form-control" />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="reg-password">Password</label>
-                <input id="reg-password" type="password" required class="form-control" />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="reg-racket">Racket Model</label>
-                <input id="reg-racket" class="form-control" />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="reg-tension">String Tension (lbs)</label>
-                <input id="reg-tension" class="form-control" />
-              </div>
-              <div class="flex gap-16 justify-between">
-                <button type="submit" class="btn btn--primary">Submit</button>
-                <button type="button" class="btn btn--secondary" id="btn-reg-cancel">Cancel</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      <!-- Login -->
-      <section id="login-section" class="hidden">
-        <div class="card max-w-md mx-auto">
-          <div class="card__header">
-            <h2 class="text-xl">Login</h2>
-          </div>
-          <div class="card__body">
-            <form id="login-form" class="flex flex-col gap-16">
-              <div class="form-group">
-                <label class="form-label" for="login-email">Email</label>
-                <input id="login-email" type="email" required class="form-control" />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="login-password">Password</label>
-                <input id="login-password" type="password" required class="form-control" />
-              </div>
-              <div class="flex gap-16 justify-between">
-                <button type="submit" class="btn btn--primary">Login</button>
-                <button type="button" class="btn btn--secondary" id="btn-login-cancel">Cancel</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      <!-- Dashboard -->
-      <section id="dashboard-section" class="hidden">
-        <h2 class="text-xl mb-8">Welcome, <span id="dash-user-name"></span>!</h2>
-        <div class="flex gap-16 flex-wrap">
-          <button class="btn btn--primary nav-btn" data-section="matches-section">View Ongoing Matches</button>
-          <button class="btn btn--primary nav-btn" data-section="history-section">View Match History</button>
-          <button class="btn btn--primary nav-btn" data-section="rank-player-section">Player Rankings</button>
-        </div>
-      </section>
-
-      <!-- Admin Sections -->
-      <section id="approval-section" class="hidden">
-        <h2 class="text-xl mb-8">Pending User Approvals</h2>
-        <div class="card">
-          <div class="card__body">
-            <table class="w-full" id="approval-table">
-              <thead>
-                <tr>
-                  <th class="text-left">Name</th>
-                  <th class="text-left">Email</th>
-                  <th class="text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-      
-      <section id="attendance-section" class="hidden">
-        <h2 class="text-xl mb-8">Attendance – <span id="attendance-date"></span></h2>
-        <form id="attendance-form" class="card">
-          <div class="card__body flex flex-col gap-8" id="attendance-list"></div>
-          <div class="card__footer flex justify-end gap-16">
-            <button type="submit" class="btn btn--primary">Save</button>
-          </div>
-        </form>
-      </section>
-
-      <!-- Manage Couples Section (Admin) -->
-      <section id="couples-section" class="hidden">
-        <h2 class="text-xl mb-8">Manage Couples</h2>
-        <div class="grid-2-col gap-32">
-          <div class="card">
-            <div class="card__header"><h3>Create a New Couple</h3></div>
-            <div class="card__body">
-              <form id="couple-form" class="flex flex-col gap-16">
-                <div class="form-group">
-                  <label class="form-label" for="couple-player1">Player 1</label>
-                  <select id="couple-player1" class="form-control"></select>
+    <main>
+        <!-- Home Section -->
+        <section id="home-section">
+            <div class="hero">
+                <h2>Welcome to SMASHERS Badminton Portal</h2>
+                <p>Manage your badminton games, track scores, and view rankings all in one place.</p>
+            </div>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <h3>Player Profiles</h3>
+                    <p>Create and manage your player profile with your racket specifications and string tension.</p>
                 </div>
-                <div class="form-group">
-                  <label class="form-label" for="couple-player2">Player 2</label>
-                  <select id="couple-player2" class="form-control"></select>
+                
+                <div class="feature-card">
+                    <h3>Couple Management</h3>
+                    <p>Form permanent partnerships with other players for doubles matches.</p>
                 </div>
-                <button type="submit" class="btn btn--primary">Create Couple</button>
-              </form>
+                
+                <div class="feature-card">
+                    <h3>Live Match Tracking</h3>
+                    <p>Follow ongoing matches in real-time and track scores.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>Rankings</h3>
+                    <p>View player and couple rankings based on performance.</p>
+                </div>
             </div>
-          </div>
-          <div class="card">
-            <div class="card__header"><h3>Existing Couples</h3></div>
-            <div class="card__body">
-              <div id="couples-list" class="flex flex-col gap-8"></div>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Game Creation Section -->
-      <section id="game-section" class="hidden">
-        <h2 class="text-xl mb-8">Create Doubles Game</h2>
-        <form id="game-form" class="card max-w-lg">
-          <div class="card__body flex flex-col gap-16">
-            <div class="form-group">
-              <label class="form-label">Game Mode</label>
-              <div class="flex gap-16">
-                <label><input type="radio" name="game-mode" value="manual" checked> Manual Selection</label>
-                <label><input type="radio" name="game-mode" value="couples"> Couple vs. Couple</label>
-              </div>
-            </div>
-            <div id="manual-mode-container">
-              <div class="form-group"><label class="form-label">Team A – Player 1</label><select id="teamA1" class="form-control manual-player-select"></select></div>
-              <div class="form-group"><label class="form-label">Team A – Player 2</label><select id="teamA2" class="form-control manual-player-select"></select></div>
-              <div class="form-group"><label class="form-label">Team B – Player 1</label><select id="teamB1" class="form-control manual-player-select"></select></div>
-              <div class="form-group"><label class="form-label">Team B – Player 2</label><select id="teamB2" class="form-control manual-player-select"></select></div>
-            </div>
-            <div id="couples-mode-container" class="hidden">
-              <div class="form-group"><label class="form-label">Team A</label><select id="teamA-couple" class="form-control couple-select"></select></div>
-              <div class="form-group"><label class="form-label">Team B</label><select id="teamB-couple" class="form-control couple-select"></select></div>
-            </div>
-          </div>
-          <div class="card__footer flex gap-16 justify-end">
-            <button type="submit" class="btn btn--primary">Create Game</button>
-            <button type="button" class="btn btn--secondary" id="btn-game-cancel">Cancel</button>
-          </div>
-        </form>
-      </section>
-
-      <!-- Public Views -->
-      <section id="matches-section" class="hidden">
-        <h2 class="text-xl mb-8">Ongoing Matches</h2>
-        <div class="flex flex-col gap-16" id="matches-list"></div>
-      </section>
-      
-      <section id="history-section" class="hidden">
-        <h2 class="text-xl mb-8">Match History</h2>
-        <div class="card">
-          <div class="card__body">
-            <form id="history-filter-form" class="flex gap-16 items-center flex-wrap">
-              <div class="form-group"><label for="start-date" class="form-label">Start Date</label><input type="date" id="start-date" class="form-control"></div>
-              <div class="form-group"><label for="end-date" class="form-label">End Date</label><input type="date" id="end-date" class="form-control"></div>
-              <button type="submit" class="btn btn--primary mt-8">Search</button>
+        <!-- Login Section -->
+        <section id="login-section" class="form-section" style="display: none;">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Login</button>
+                    <button type="button" class="btn-secondary" onclick="showHome()">Cancel</button>
+                </div>
             </form>
-          </div>
-        </div>
-        <div id="history-list" class="flex flex-col gap-16 mt-16"></div>
-      </section>
+        </section>
 
-      <section id="rank-player-section" class="hidden">
-        <h2 class="text-xl mb-8">Player Rankings</h2>
-        <div class="chart-container" style="position: relative; height: 400px;"><canvas id="playerRankChart"></canvas></div>
-      </section>
+        <!-- Register Section -->
+        <section id="register-section" class="form-section" style="display: none;">
+            <h2>Register</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" id="register-name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" name="password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-racket">Racket Model</label>
+                    <input type="text" id="register-racket" name="racketModel">
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-tension">String Tension</label>
+                    <input type="text" id="register-tension" name="stringTension">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Register</button>
+                    <button type="button" class="btn-secondary" onclick="showHome()">Cancel</button>
+                </div>
+            </form>
+        </section>
 
-      <section id="rank-couples-section" class="hidden">
-        <h2 class="text-xl mb-8">Couple Rankings</h2>
-        <div class="chart-container" style="position: relative; height: 400px;"><canvas id="coupleRankChart"></canvas></div>
-      </section>
+        <!-- Profile Section -->
+        <section id="profile-section" class="form-section" style="display: none;">
+            <h2>My Profile</h2>
+            
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="profile-name">Full Name</label>
+                    <input type="text" id="profile-name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="profile-racket">Racket Model</label>
+                    <input type="text" id="profile-racket" name="racketModel">
+                </div>
+                
+                <div class="form-group">
+                    <label for="profile-tension">String Tension</label>
+                    <input type="text" id="profile-tension" name="stringTension">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="button" class="btn-secondary" onclick="showHome()">Cancel</button>
+                </div>
+            </form>
+            
+            <h3>Change Password</h3>
+            <form id="change-password-form">
+                <div class="form-group">
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password" name="currentPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" name="newPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password">Confirm New Password</label>
+                    <input type="password" id="confirm-password" name="confirmPassword" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Change Password</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Ongoing Matches Section -->
+        <section id="matches-section" style="display: none;">
+            <h2>Ongoing Matches</h2>
+            <div id="ongoing-matches-container"></div>
+        </section>
+
+        <!-- Player Rankings Section -->
+        <section id="player-rankings-section" style="display: none;">
+            <h2>Player Rankings</h2>
+            <div id="player-rankings-container" class="rankings-container"></div>
+        </section>
+
+        <!-- Couple Rankings Section -->
+        <section id="couple-rankings-section" style="display: none;">
+            <h2>Couple Rankings</h2>
+            <div id="couple-rankings-container" class="rankings-container"></div>
+        </section>
+
+        <!-- Admin Dashboard Section -->
+        <section id="admin-dashboard-section" style="display: none;">
+            <h2>Admin Dashboard</h2>
+            <h3>Pending User Approvals</h3>
+            <div id="pending-users-container"></div>
+        </section>
+
+        <!-- Attendance Section -->
+        <section id="attendance-section" style="display: none;">
+            <h2>Attendance Management</h2>
+            <input type="hidden" id="attendance-date">
+            <div id="attendance-container"></div>
+        </section>
+
+        <!-- Create Game Section -->
+        <section id="create-game-section" style="display: none;">
+            <h2>Create New Game</h2>
+            
+            <div class="game-mode-selector">
+                <label>
+                    <input type="radio" name="gameMode" value="couples" onchange="toggleGameMode()">
+                    Couple vs Couple
+                </label>
+                <label>
+                    <input type="radio" name="gameMode" value="manual" checked onchange="toggleGameMode()">
+                    Manual Selection
+                </label>
+            </div>
+            
+            <form id="create-game-form">
+                <div id="couples-mode" style="display: none;">
+                    <div class="form-group">
+                        <label for="couple1">Team A (Couple)</label>
+                        <select id="couple1" class="couple-dropdown"></select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="couple2">Team B (Couple)</label>
+                        <select id="couple2" class="couple-dropdown"></select>
+                    </div>
+                </div>
+                
+                <div id="manual-mode">
+                    <h3>Team A</h3>
+                    <div class="form-group">
+                        <label for="teamA-player1">Player 1</label>
+                        <select id="teamA-player1" class="player-dropdown"></select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teamA-player2">Player 2</label>
+                        <select id="teamA-player2" class="player-dropdown"></select>
+                    </div>
+                    
+                    <h3>Team B</h3>
+                    <div class="form-group">
+                        <label for="teamB-player1">Player 1</label>
+                        <select id="teamB-player1" class="player-dropdown"></select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teamB-player2">Player 2</label>
+                        <select id="teamB-player2" class="player-dropdown"></select>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Create Game</button>
+                    <button type="button" class="btn-secondary" onclick="showHome()">Cancel</button>
+                </div>
+            </form>
+        </section>
     </main>
+
     <script src="app.js"></script>
-  </body>
+</body>
 </html>
