@@ -1,28 +1,46 @@
-// SMASHERS Badminton Portal Application - Client-Side (COMPLETE & FINAL)
+
+// SMASHERS Badminton Portal Application - Client-Side
 
 class SmashersApp {
   constructor() {
     this.currentUser = null;
     this.currentSection = 'login-section';
-    // IMPORTANT: PASTE YOUR LIVE CLOUD RUN URL HERE
+    // The API URL for your backend. For local development, this is correct.
+    // For deployment, you will change this to your live server URL.
+    // Change this line
     this.apiUrl = 'https://smashers-backend-836155982119.us-central1.run.app/api';
+
+    // No more local data arrays!
+    // this.users = [];
+    // this.couples = [];
+    // this.matches = [];
+    // this.attendance = {};
+
     this.playerRankChart = null;
     this.coupleRankChart = null;
+    
     this.init();
   }
 
   init() {
+    // No more sample data!
+    // this.createSampleData();
     this.setupEventListeners();
     this.updateNav();
     this.showSection('login-section');
+    
     this.startMatchPolling();
   }
 
+  // --- NEW: API HELPER ---
+  // A helper function to make API requests and handle errors consistently.
   async apiRequest(endpoint, method = 'GET', body = null) {
       try {
           const options = {
               method,
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                  'Content-Type': 'application/json',
+              },
           };
           if (body) {
               options.body = JSON.stringify(body);
@@ -36,10 +54,11 @@ class SmashersApp {
       } catch (error) {
           console.error(`API Error on ${method} ${endpoint}:`, error);
           this.showNotification(error.message, 'error');
-          throw error;
+          throw error; // Re-throw the error so the calling function can handle it
       }
   }
 
+  // --- AUTHENTICATION (Now uses API) ---
   async login(email, password) {
     try {
         const data = await this.apiRequest('/login', 'POST', { email, password });
@@ -47,7 +66,9 @@ class SmashersApp {
         this.updateNav();
         this.showSection('dashboard-section');
         this.showNotification(`Welcome back, ${this.currentUser.name}!`, 'success');
-    } catch (error) {}
+    } catch (error) {
+        // Error notification is already handled by apiRequest
+    }
   }
 
   logout() {
@@ -62,26 +83,24 @@ class SmashersApp {
         this.showNotification('Registration submitted! Awaiting admin approval.', 'success');
         document.getElementById('register-form').reset();
         this.showSection('login-section');
-    } catch (error) {}
+    } catch (error) {
+        // Error notification is already handled by apiRequest
+    }
   }
 
+  // --- NAVIGATION (No changes needed) ---
   updateNav() {
-    const isAdmin = this.currentUser?.role === 'Admin';
-    const isLoggedIn = !!this.currentUser;
     const navItems = {
-      'nav-register': !isLoggedIn,
-      'nav-login': !isLoggedIn,
-      'nav-dashboard': isLoggedIn,
-      'nav-my-profile': isLoggedIn,
-      'nav-players': isLoggedIn,
-      'nav-approval': isAdmin,
-      'nav-attendance': isAdmin,
-      'nav-game': isAdmin,
-      'nav-matches': isLoggedIn,
-      'nav-history': isLoggedIn,
-      'nav-rank-players': isLoggedIn,
-      'nav-rank-couples': isLoggedIn,
-      'btn-logout': isLoggedIn
+      'nav-register': !this.currentUser,
+      'nav-login': !this.currentUser,
+      'nav-dashboard': !!this.currentUser,
+      'nav-approval': this.currentUser?.role === 'Admin',
+      'nav-attendance': this.currentUser?.role === 'Admin',
+      'nav-game': this.currentUser?.role === 'Admin',
+      'nav-matches': !!this.currentUser,
+      'nav-rank-players': !!this.currentUser,
+      'nav-rank-couples': !!this.currentUser,
+      'btn-logout': !!this.currentUser
     };
 
     Object.entries(navItems).forEach(([id, show]) => {
@@ -101,24 +120,40 @@ class SmashersApp {
       section.classList.remove('hidden');
       this.currentSection = sectionId;
     }
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('nav-active'));
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.classList.remove('nav-active');
+    });
     const activeNav = document.querySelector(`[data-section="${sectionId}"]`);
-    if (activeNav) activeNav.classList.add('nav-active');
+    if (activeNav) {
+      activeNav.classList.add('nav-active');
+    }
     this.loadSectionData(sectionId);
   }
 
+  // --- DATA LOADING (Now fetches from API) ---
   loadSectionData(sectionId) {
     switch (sectionId) {
-      case 'dashboard-section': this.loadDashboard(); break;
-      case 'approval-section': this.loadApprovalPage(); break;
-      case 'attendance-section': this.loadAttendancePage(); break;
-      case 'game-section': this.loadGamePage(); break;
-      case 'matches-section': this.loadMatchesPage(); break;
-      case 'my-profile-section': this.loadMyProfile(); break;
-      case 'players-section': this.loadPlayersPage(); break;
-      case 'history-section': this.loadHistoryPage(); break;
-      case 'rank-player-section': this.loadPlayerRankings(); break;
-      case 'rank-couples-section': this.loadCoupleRankings(); break;
+      case 'dashboard-section':
+        this.loadDashboard();
+        break;
+      case 'approval-section':
+        this.loadApprovalPage();
+        break;
+      case 'attendance-section':
+        this.loadAttendancePage();
+        break;
+      case 'game-section':
+        this.loadGamePage();
+        break;
+      case 'matches-section':
+        this.loadMatchesPage();
+        break;
+      case 'rank-player-section':
+        this.loadPlayerRankings();
+        break;
+      case 'rank-couples-section':
+        this.loadCoupleRankings();
+        break;
     }
   }
 
@@ -129,116 +164,186 @@ class SmashersApp {
     }
   }
 
-  async loadApprovalPage() { /* ... unchanged ... */ }
-  async approveUser(userId) { /* ... unchanged ... */ }
-  async rejectUser(userId) { /* ... unchanged ... */ }
-  async loadAttendancePage() { /* ... unchanged ... */ }
-  async saveAttendance() { /* ... unchanged ... */ }
-  async loadGamePage() { /* ... unchanged ... */ }
-  async createGame(teamA1, teamA2, teamB1, teamB2) { /* ... unchanged ... */ }
-  async loadMatchesPage() { /* ... unchanged ... */ }
-  async updateScore(matchId) { /* ... unchanged ... */ }
-  async endMatch(matchId) { /* ... unchanged ... */ }
-
-  async loadMyProfile() {
-    const container = document.getElementById('profile-details');
-    container.innerHTML = '<h4>Loading...</h4>';
+  async loadApprovalPage() {
+    const tbody = document.querySelector('#approval-table tbody');
+    if (!tbody) return;
     try {
-        const requests = await this.apiRequest(`/couples/requests/${this.currentUser.id}`);
-        let html = `<div class="card__body"><h5>Incoming Partnership Requests</h5>`;
-        
-        if (requests.incoming.length > 0) {
-            requests.incoming.forEach(req => {
-                html += `<div class="request-card"><p><strong>${this.escapeHtml(req.requesterName)}</strong> wants to be your partner.</p><div class="actions"><button class="btn btn--primary btn--sm" data-action="accept-request" data-request-id="${req.id}">Accept</button><button class="btn btn--secondary btn--sm" data-action="reject-request" data-request-id="${req.id}">Reject</button></div></div>`;
-            });
-        } else {
-            html += `<p class="empty-state">No incoming requests.</p>`;
+        const pendingUsers = await this.apiRequest('/users/pending');
+        tbody.innerHTML = pendingUsers.map(user => `
+          <tr>
+            <td>${this.escapeHtml(user.name)}</td>
+            <td>${this.escapeHtml(user.email)}</td>
+            <td class="admin-actions">
+              <button class="btn btn--primary btn--sm" data-action="approve" data-user-id="${user.id}">Approve</button>
+              <button class="btn btn--secondary btn--sm" data-action="reject" data-user-id="${user.id}">Reject</button>
+            </td>
+          </tr>
+        `).join('');
+        if (pendingUsers.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No pending approvals</td></tr>';
         }
-        
-        html += `<hr class="my-16"><h5>Outgoing Requests</h5>`;
-        
-        if (requests.outgoing.length > 0) {
-            const allUsers = await this.apiRequest('/users/all');
-            const usersMap = new Map(allUsers.map(u => [u.id, u.name]));
-            requests.outgoing.forEach(req => {
-                 html += `<div class="request-card"><p>You sent a request to <strong>${this.escapeHtml(usersMap.get(req.partnerId))}</strong>.</p><div class="actions"><button class="btn btn--secondary btn--sm" data-action="cancel-request" data-request-id="${req.id}">Cancel</button></div></div>`;
-            });
-        } else {
-            html += `<p class="empty-state">No outgoing requests.</p>`;
-        }
-        
-        html += `</div>`;
-        container.innerHTML = html;
     } catch (error) {
-        container.innerHTML = `<div class="card__body empty-state">Could not load profile data.</div>`;
+        tbody.innerHTML = '<tr><td colspan="3" class="empty-state">Could not load data</td></tr>';
     }
   }
 
-  async loadPlayersPage() {
-    const container = document.getElementById('players-list-container');
-    container.innerHTML = '<p>Loading players...</p>';
+  async approveUser(userId) {
     try {
-        const players = await this.apiRequest('/users/all');
-        const otherPlayers = players.filter(p => p.id !== this.currentUser.id);
-
-        container.innerHTML = otherPlayers.map(player => `
-            <div class="player-item">
-                <span><strong>${this.escapeHtml(player.name)}</strong> (Rating: ${player.rating})</span>
-                <button class="btn btn--primary btn--sm" data-action="send-request" data-partner-id="${player.id}">Request Partnership</button>
-            </div>
-        `).join('') || '<p class="empty-state">No other players found.</p>';
-    } catch (error) {
-        container.innerHTML = '<p class="empty-state">Could not load players.</p>';
-    }
+        await this.apiRequest(`/users/${userId}/approve`, 'PATCH');
+        this.showNotification('User approved successfully', 'success');
+        this.loadApprovalPage(); // Refresh the list
+    } catch (error) {}
   }
 
-  async loadHistoryPage(startDate = null, endDate = null) {
-      const list = document.getElementById('history-list');
-      list.innerHTML = '<h4>Loading history...</h4>';
-      try {
-          let endpoint = '/matches/history';
-          if(startDate || endDate) {
-              const params = new URLSearchParams();
-              if(startDate) params.append('startDate', startDate);
-              if(endDate) params.append('endDate', endDate);
-              endpoint += `?${params.toString()}`;
-          }
-          const matches = await this.apiRequest(endpoint);
-          
-          if(matches.length === 0) {
-              list.innerHTML = '<div class="empty-state"><h3>No completed matches found for this period.</h3></div>';
-              return;
-          }
-
-          list.innerHTML = matches.map(match => {
-              const winnerA = match.winnerTeam === 'A';
-              const date = new Date(match.date).toLocaleDateString();
-              return `
-              <div class="history-card">
-                  <p class="history-card__date">${date}</p>
-                  <div class="${winnerA ? 'history-card__winner' : ''}">
-                    Team A: ${this.escapeHtml(match.teamAPlayer1Name)} & ${this.escapeHtml(match.teamAPlayer2Name)} - <strong>${match.scoreTeamA}</strong>
-                  </div>
-                  <div class="${!winnerA ? 'history-card__winner' : ''}">
-                    Team B: ${this.escapeHtml(match.teamBPlayer1Name)} & ${this.escapeHtml(match.teamBPlayer2Name)} - <strong>${match.scoreTeamB}</strong>
-                  </div>
-              </div>`;
-          }).join('');
-      } catch (error) {
-          list.innerHTML = '<div class="empty-state"><h3>Could not load match history.</h3></div>';
-      }
+  async rejectUser(userId) {
+     try {
+        await this.apiRequest(`/users/${userId}`, 'DELETE');
+        this.showNotification('User rejected', 'info');
+        this.loadApprovalPage(); // Refresh the list
+    } catch (error) {}
   }
   
-  async loadPlayerRankings() {
-    const ctx = document.getElementById('playerRankChart');
-    const tableBody = document.getElementById('player-rank-table');
-    if (!ctx || !tableBody) return;
+  async loadAttendancePage() {
+    const dateElement = document.getElementById('attendance-date');
+    const listElement = document.getElementById('attendance-list');
+    if (dateElement) dateElement.textContent = new Date().toLocaleDateString();
+    if (!listElement) return;
 
     try {
-        const players = await this.apiRequest('/rankings/players');
-        
-        tableBody.innerHTML = players.map((p, index) => `<tr><td>${index + 1}</td><td>${this.escapeHtml(p.name)}</td><td>${p.rating}</td></tr>`).join('');
+        // Fetch all approved users and today's attendance in parallel
+        const [approvedUsers, attendanceData] = await Promise.all([
+            this.apiRequest('/users/approved'),
+            this.apiRequest('/attendance/today')
+        ]);
+        const todayAttendance = new Set(attendanceData.presentUsers);
 
+        listElement.innerHTML = approvedUsers.map(user => `
+          <div class="attendance-item">
+            <input type="checkbox" class="attendance-checkbox" 
+                   id="att-${user.id}" 
+                   ${todayAttendance.has(user.id) ? 'checked' : ''}>
+            <label for="att-${user.id}">${this.escapeHtml(user.name)}</label>
+          </div>
+        `).join('');
+    } catch (error) {
+        listElement.innerHTML = '<div class="empty-state">Could not load attendance data</div>';
+    }
+  }
+
+  async saveAttendance() {
+    const checkboxes = document.querySelectorAll('.attendance-checkbox');
+    const presentUsers = Array.from(checkboxes)
+      .filter(cb => cb.checked)
+      .map(cb => cb.id.replace('att-', ''));
+
+    try {
+        await this.apiRequest('/attendance', 'POST', { presentUsers });
+        this.showNotification('Attendance saved', 'success');
+    } catch (error) {}
+  }
+
+  async loadGamePage() {
+    const selects = ['teamA1', 'teamA2', 'teamB1', 'teamB2'];
+    try {
+        const availablePlayers = await this.apiRequest('/users/available');
+        selects.forEach(selectId => {
+          const select = document.getElementById(selectId);
+          if (select) {
+            select.innerHTML = '<option value="">Select Player</option>' +
+              availablePlayers.map(player => 
+                `<option value="${player.id}">${this.escapeHtml(player.name)}</option>`
+              ).join('');
+          }
+        });
+    } catch (error) {
+        // Handle error, maybe disable the form
+    }
+  }
+
+  async createGame(teamA1, teamA2, teamB1, teamB2) {
+    try {
+        await this.apiRequest('/matches', 'POST', { teamA1, teamA2, teamB1, teamB2 });
+        this.showNotification('Game created successfully', 'success');
+        document.getElementById('game-form').reset();
+        this.showSection('matches-section');
+    } catch (error) {}
+  }
+  
+  async loadMatchesPage() {
+    const matchesList = document.getElementById('matches-list');
+    if (!matchesList) return;
+    try {
+        const ongoingMatches = await this.apiRequest('/matches/ongoing');
+        if (ongoingMatches.length === 0) {
+            matchesList.innerHTML = '<div class="empty-state"><h3>No ongoing matches</h3><p>Check back later or create a new game.</p></div>';
+            return;
+        }
+
+        matchesList.innerHTML = ongoingMatches.map(match => `
+            <div class="match-card">
+              <div class="match-status match-status--ongoing">Ongoing</div>
+              <div class="team-score">
+                <span>${this.escapeHtml(match.teamAPlayer1Name)} & ${this.escapeHtml(match.teamAPlayer2Name)}</span>
+                <span class="score-display">${match.scoreTeamA}</span>
+              </div>
+              <div class="vs-divider">VS</div>
+              <div class="team-score">
+                <span>${this.escapeHtml(match.teamBPlayer1Name)} & ${this.escapeHtml(match.teamBPlayer2Name)}</span>
+                <span class="score-display">${match.scoreTeamB}</span>
+              </div>
+              ${this.currentUser?.role === 'Admin' ? `
+                <div class="flex gap-8 mt-8">
+                  <input type="number" class="form-control score-input" data-match-id="${match.id}" data-team="A" value="${match.scoreTeamA}" min="0" max="30">
+                  <input type="number" class="form-control score-input" data-match-id="${match.id}" data-team="B" value="${match.scoreTeamB}" min="0" max="30">
+                  <button class="btn btn--primary btn--sm" data-action="update-score" data-match-id="${match.id}">Update Score</button>
+                  <button class="btn btn--secondary btn--sm" data-action="end-match" data-match-id="${match.id}">End Match</button>
+                </div>
+              ` : ''}
+            </div>
+        `).join('');
+    } catch (error) {
+        matchesList.innerHTML = '<div class="empty-state"><h3>Could not load matches</h3></div>';
+    }
+  }
+
+  async updateScore(matchId) {
+    const scoreAInput = document.querySelector(`input[data-match-id="${matchId}"][data-team="A"]`);
+    const scoreBInput = document.querySelector(`input[data-match-id="${matchId}"][data-team="B"]`);
+    if (!scoreAInput || !scoreBInput) return;
+
+    const scoreTeamA = parseInt(scoreAInput.value) || 0;
+    const scoreTeamB = parseInt(scoreBInput.value) || 0;
+
+    try {
+        await this.apiRequest(`/matches/${matchId}/score`, 'PATCH', { scoreTeamA, scoreTeamB });
+        this.showNotification('Score updated', 'success');
+        
+        // Auto-end match logic (optional, can also be handled on backend)
+        if ((scoreTeamA >= 21 || scoreTeamB >= 21) && Math.abs(scoreTeamA - scoreTeamB) >= 2) {
+          await this.endMatch(matchId);
+        } else {
+          this.loadMatchesPage();
+        }
+    } catch (error) {}
+  }
+
+  async endMatch(matchId) {
+    try {
+        await this.apiRequest(`/matches/${matchId}/end`, 'POST');
+        this.showNotification('Match completed and ratings updated!', 'success');
+        this.loadMatchesPage();
+    } catch (error) {}
+  }
+  
+  // RATING LOGIC IS NOW ON THE BACKEND! These functions are removed from the client.
+  // updatePlayerRatings() { ... }
+  // updateCoupleRatings() { ... }
+
+  async loadPlayerRankings() {
+    const ctx = document.getElementById('playerRankChart');
+    if (!ctx) return;
+    try {
+        const players = await this.apiRequest('/rankings/players');
         if (this.playerRankChart) this.playerRankChart.destroy();
         this.playerRankChart = new Chart(ctx, {
           type: 'bar',
@@ -248,112 +353,165 @@ class SmashersApp {
           },
           options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Top Player Rankings' } } }
         });
-    } catch (error) {
-        tableBody.innerHTML = '<tr><td colspan="3" class="empty-state">Could not load rankings.</td></tr>';
-    }
+    } catch (error) {}
   }
 
-  async loadCoupleRankings() {
+  loadCoupleRankings() {
+    // This functionality is currently stubbed on the backend.
+    // To implement fully, create a 'couples' collection in Firestore,
+    // build the necessary API endpoints, and then fetch/display the data here.
     const ctx = document.getElementById('coupleRankChart');
-    const tableBody = document.getElementById('couple-rank-table');
-    if (!ctx || !tableBody) return;
-
-    try {
-        const couples = await this.apiRequest('/rankings/couples');
-        const coupleNames = couples.map(c => `${c.player1Name} & ${c.player2Name}`);
-
-        tableBody.innerHTML = couples.map((c, index) => `<tr><td>${index + 1}</td><td>${this.escapeHtml(coupleNames[index])}</td><td>${c.rating}</td><td>${c.wins}</td><td>${c.totalMatches}</td></tr>`).join('');
-
-        if (this.coupleRankChart) this.coupleRankChart.destroy();
-        this.coupleRankChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: coupleNames,
-                datasets: [{ label: 'Rating', data: couples.map(c => c.rating), backgroundColor: '#FFC185' }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Top Couple Rankings' } } }
-        });
-    } catch (error) {
-        tableBody.innerHTML = '<tr><td colspan="5" class="empty-state">Could not load rankings.</td></tr>';
-    }
+    if (!ctx) return;
+    if (this.coupleRankChart) this.coupleRankChart.destroy();
+    this.showNotification('Couple rankings are not yet implemented.', 'info');
   }
 
-  async sendPartnerRequest(partnerId) {
-    try {
-        await this.apiRequest('/couples/request', 'POST', { requesterId: this.currentUser.id, requesterName: this.currentUser.name, partnerId: partnerId });
-        this.showNotification('Partnership request sent!', 'success');
-        this.loadPlayersPage();
-    } catch (error) {}
+  // --- UTILITIES & EVENT LISTENERS (Mostly unchanged) ---
+  escapeHtml(unsafe) {
+    return unsafe.toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }
 
-  async acceptRequest(requestId) {
-    try {
-        await this.apiRequest(`/couples/requests/${requestId}/accept`, 'PATCH');
-        this.showNotification('Partnership formed!', 'success');
-        this.loadMyProfile();
-    } catch (error) {}
+  showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification--${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
   }
-  
-  async rejectRequest(requestId) {
-    try {
-        await this.apiRequest(`/couples/requests/${requestId}`, 'DELETE');
-        this.showNotification('Request rejected.', 'info');
-        this.loadMyProfile();
-    } catch (error) {}
+
+  startMatchPolling() {
+    setInterval(() => {
+      if (this.currentSection === 'matches-section' && this.currentUser) {
+        this.loadMatchesPage();
+      }
+    }, 10000); // Poll every 10 seconds
   }
-  
-  escapeHtml(unsafe) { /* ... unchanged ... */ }
-  showNotification(message, type = 'info') { /* ... unchanged ... */ }
-  startMatchPolling() { /* ... unchanged ... */ }
 
   setupEventListeners() {
-      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-      const navbar = document.getElementById('navbar');
-      const iconMenu = mobileMenuBtn.querySelector('.icon-menu');
-      const iconClose = mobileMenuBtn.querySelector('.icon-close');
-      mobileMenuBtn.addEventListener('click', () => { /* ... unchanged mobile logic ... */ });
+    document.addEventListener('click', (e) => {
+        // ... (The entire click handler logic is the same as your original file)
+        // Logo click to go to dashboard
+        if (e.target.closest('.logo') && this.currentUser) {
+            e.preventDefault();
+            this.showSection('dashboard-section');
+            return;
+        }
 
-      document.addEventListener('click', (e) => {
-          if (e.target.classList.contains('nav-btn')) {
-              e.preventDefault();
-              this.showSection(e.target.dataset.section);
-              if (navbar.classList.contains('nav-open')) { /* ... unchanged mobile logic ... */ }
-              return;
-          }
-          const action = e.target.dataset.action;
-          if (action) {
-              e.preventDefault();
-              switch(action) {
-                  case 'approve': this.approveUser(e.target.dataset.userId); break;
-                  case 'reject': this.rejectUser(e.target.dataset.userId); break;
-                  case 'update-score': this.updateScore(e.target.dataset.matchId); break;
-                  case 'end-match': this.endMatch(e.target.dataset.matchId); break;
-                  case 'send-request': this.sendPartnerRequest(e.target.dataset.partnerId); break;
-                  case 'accept-request': this.acceptRequest(e.target.dataset.requestId); break;
-                  case 'reject-request': this.rejectRequest(e.target.dataset.requestId); break;
-                  case 'cancel-request': this.rejectRequest(e.target.dataset.requestId); break;
-              }
-          }
-          // ... other click handlers like logout, cancel buttons etc.
-      });
-      
-      document.addEventListener('submit', (e) => {
-          e.preventDefault();
-          switch(e.target.id) {
-              case 'login-form': /* ... unchanged ... */ break;
-              case 'register-form': /* ... unchanged ... */ break;
-              case 'attendance-form': this.saveAttendance(); break;
-              case 'game-form': /* ... unchanged ... */ break;
-              case 'history-filter-form':
-                  const startDate = document.getElementById('start-date').value;
-                  const endDate = document.getElementById('end-date').value;
-                  this.loadHistoryPage(startDate, endDate);
-                  break;
-          }
-      });
+        // Navigation
+        if (e.target.classList.contains('nav-btn') && e.target.hasAttribute('data-section')) {
+            e.preventDefault();
+            const targetSection = e.target.getAttribute('data-section');
+            this.showSection(targetSection);
+            return;
+        }
+
+        // Admin actions
+        if (e.target.hasAttribute('data-action')) {
+            e.preventDefault();
+            const action = e.target.getAttribute('data-action');
+            const userId = e.target.getAttribute('data-user-id');
+            const matchId = e.target.getAttribute('data-match-id');
+
+            switch (action) {
+            case 'approve':
+                if (userId) this.approveUser(userId);
+                break;
+            case 'reject':
+                if (userId) this.rejectUser(userId);
+                break;
+            case 'update-score':
+                if (matchId) this.updateScore(matchId);
+                break;
+            case 'end-match':
+                if (matchId) this.endMatch(matchId);
+                break;
+            }
+            return;
+        }
+
+        // Logout
+        if (e.target.id === 'btn-logout') {
+            e.preventDefault();
+            this.logout();
+            return;
+        }
+
+        // Form cancel buttons
+        if (e.target.id === 'btn-reg-cancel') {
+            e.preventDefault();
+            document.getElementById('register-form')?.reset();
+            this.showSection('login-section');
+            return;
+        }
+        if (e.target.id === 'btn-login-cancel') {
+            e.preventDefault();
+            document.getElementById('login-form')?.reset();
+            return;
+        }
+        if (e.target.id === 'btn-game-cancel') {
+            e.preventDefault();
+            document.getElementById('game-form')?.reset();
+            this.showSection('dashboard-section');
+            return;
+        }
+    });
+
+    document.addEventListener('submit', (e) => {
+        // The submit handler logic is almost the same, but it calls our new async functions
+        e.preventDefault();
+        
+        if (e.target.id === 'register-form') {
+            const userData = {
+                name: document.getElementById('reg-name').value.trim(),
+                email: document.getElementById('reg-email').value.trim(),
+                password: document.getElementById('reg-password').value,
+                racket: document.getElementById('reg-racket').value.trim(),
+                tension: document.getElementById('reg-tension').value.trim()
+            };
+            if (!userData.name || !userData.email || !userData.password) {
+                this.showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+            this.register(userData);
+        }
+
+        if (e.target.id === 'login-form') {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            if (!email || !password) {
+                this.showNotification('Please enter both email and password', 'error');
+                return;
+            }
+            this.login(email, password);
+        }
+
+        if (e.target.id === 'attendance-form') {
+            this.saveAttendance();
+        }
+
+        if (e.target.id === 'game-form') {
+            const teamA1 = document.getElementById('teamA1').value;
+            const teamA2 = document.getElementById('teamA2').value;
+            const teamB1 = document.getElementById('teamB1').value;
+            const teamB2 = document.getElementById('teamB2').value;
+
+            if (!teamA1 || !teamA2 || !teamB1 || !teamB2) {
+                this.showNotification('Please select all players', 'error');
+                return;
+            }
+            const allPlayers = [teamA1, teamA2, teamB1, teamB2];
+            const uniquePlayers = new Set(allPlayers);
+            if (uniquePlayers.size !== 4) {
+                this.showNotification('Each player can only be selected once', 'error');
+                return;
+            }
+            this.createGame(teamA1, teamA2, teamB1, teamB2);
+        }
+    });
   }
 }
 
+// Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   window.app = new SmashersApp();
 });
