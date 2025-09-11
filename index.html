@@ -44,11 +44,69 @@
     </header>
 
     <main class="container py-16 flex flex-col gap-32">
-      <!-- Login & Register Sections (no changes) -->
-      <section id="register-section" class="hidden">...</section>
-      <section id="login-section" class="hidden">...</section>
+      <!-- Register -->
+      <section id="register-section" class="hidden">
+        <div class="card max-w-md mx-auto">
+          <div class="card__header">
+            <h2 class="text-xl">Player Registration</h2>
+          </div>
+          <div class="card__body">
+            <form id="register-form" class="flex flex-col gap-16">
+              <div class="form-group">
+                <label class="form-label" for="reg-name">Name</label>
+                <input id="reg-name" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-email">Email</label>
+                <input id="reg-email" type="email" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-password">Password</label>
+                <input id="reg-password" type="password" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-racket">Racket Model</label>
+                <input id="reg-racket" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-tension">String Tension (lbs)</label>
+                <input id="reg-tension" class="form-control" />
+              </div>
+              <div class="flex gap-16 justify-between">
+                <button type="submit" class="btn btn--primary">Submit</button>
+                <button type="button" class="btn btn--secondary" id="btn-reg-cancel">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
 
-      <!-- Dashboard (no changes) -->
+      <!-- Login -->
+      <section id="login-section" class="hidden">
+        <div class="card max-w-md mx-auto">
+          <div class="card__header">
+            <h2 class="text-xl">Login</h2>
+          </div>
+          <div class="card__body">
+            <form id="login-form" class="flex flex-col gap-16">
+              <div class="form-group">
+                <label class="form-label" for="login-email">Email</label>
+                <input id="login-email" type="email" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="login-password">Password</label>
+                <input id="login-password" type="password" required class="form-control" />
+              </div>
+              <div class="flex gap-16 justify-between">
+                <button type="submit" class="btn btn--primary">Login</button>
+                <button type="button" class="btn btn--secondary" id="btn-login-cancel">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dashboard -->
       <section id="dashboard-section" class="hidden">
         <h2 class="text-xl mb-8">Welcome, <span id="dash-user-name"></span>!</h2>
         <div class="flex gap-16 flex-wrap">
@@ -58,9 +116,34 @@
         </div>
       </section>
 
-      <!-- Admin Sections (some new, some changed) -->
-      <section id="approval-section" class="hidden">...</section>
-      <section id="attendance-section" class="hidden">...</section>
+      <!-- Admin Sections -->
+      <section id="approval-section" class="hidden">
+        <h2 class="text-xl mb-8">Pending User Approvals</h2>
+        <div class="card">
+          <div class="card__body">
+            <table class="w-full" id="approval-table">
+              <thead>
+                <tr>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">Email</th>
+                  <th class="text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      
+      <section id="attendance-section" class="hidden">
+        <h2 class="text-xl mb-8">Attendance – <span id="attendance-date"></span></h2>
+        <form id="attendance-form" class="card">
+          <div class="card__body flex flex-col gap-8" id="attendance-list"></div>
+          <div class="card__footer flex justify-end gap-16">
+            <button type="submit" class="btn btn--primary">Save</button>
+          </div>
+        </form>
+      </section>
 
       <!-- NEW: Manage Couples Section (Admin) -->
       <section id="couples-section" class="hidden">
@@ -145,7 +228,10 @@
       </section>
 
       <!-- Public Views -->
-      <section id="matches-section" class="hidden">...</section>
+      <section id="matches-section" class="hidden">
+        <h2 class="text-xl mb-8">Ongoing Matches</h2>
+        <div class="flex flex-col gap-16" id="matches-list"></div>
+      </section>
       
       <!-- NEW: Match History Section -->
       <section id="history-section" class="hidden">
@@ -168,8 +254,19 @@
         <div id="history-list" class="flex flex-col gap-16 mt-16"></div>
       </section>
 
-      <section id="rank-player-section" class="hidden">...</section>
-      <section id="rank-couples-section" class="hidden">...</section>
+      <section id="rank-player-section" class="hidden">
+        <h2 class="text-xl mb-8">Player Rankings</h2>
+        <div class="chart-container" style="position: relative; height: 400px;">
+          <canvas id="playerRankChart"></canvas>
+        </div>
+      </section>
+
+      <section id="rank-couples-section" class="hidden">
+        <h2 class="text-xl mb-8">Couple Rankings</h2>
+        <div class="chart-container" style="position: relative; height: 400px;">
+          <canvas id="coupleRankChart"></canvas>
+        </div>
+      </section>
     </main>
     <script src="app.js"></script>
   </body>
