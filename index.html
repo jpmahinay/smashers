@@ -145,7 +145,7 @@
         </form>
       </section>
 
-      <!-- NEW: Manage Couples Section (Admin) -->
+      <!-- Manage Couples Section (Admin) -->
       <section id="couples-section" class="hidden">
         <h2 class="text-xl mb-8">Manage Couples</h2>
         <div class="grid-2-col gap-32">
@@ -174,12 +174,11 @@
         </div>
       </section>
 
-      <!-- UPDATED: Game Creation Section -->
+      <!-- Game Creation Section -->
       <section id="game-section" class="hidden">
         <h2 class="text-xl mb-8">Create Doubles Game</h2>
         <form id="game-form" class="card max-w-lg">
           <div class="card__body flex flex-col gap-16">
-            <!-- Game Mode Switcher -->
             <div class="form-group">
               <label class="form-label">Game Mode</label>
               <div class="flex gap-16">
@@ -187,37 +186,15 @@
                 <label><input type="radio" name="game-mode" value="couples"> Couple vs. Couple</label>
               </div>
             </div>
-
-            <!-- Manual Selection Mode UI -->
             <div id="manual-mode-container">
-              <div class="form-group">
-                <label class="form-label">Team A – Player 1</label>
-                <select id="teamA1" class="form-control manual-player-select"></select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Team A – Player 2</label>
-                <select id="teamA2" class="form-control manual-player-select"></select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Team B – Player 1</label>
-                <select id="teamB1" class="form-control manual-player-select"></select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Team B – Player 2</label>
-                <select id="teamB2" class="form-control manual-player-select"></select>
-              </div>
+              <div class="form-group"><label class="form-label">Team A – Player 1</label><select id="teamA1" class="form-control manual-player-select"></select></div>
+              <div class="form-group"><label class="form-label">Team A – Player 2</label><select id="teamA2" class="form-control manual-player-select"></select></div>
+              <div class="form-group"><label class="form-label">Team B – Player 1</label><select id="teamB1" class="form-control manual-player-select"></select></div>
+              <div class="form-group"><label class="form-label">Team B – Player 2</label><select id="teamB2" class="form-control manual-player-select"></select></div>
             </div>
-
-            <!-- Couple vs. Couple Mode UI (hidden by default) -->
             <div id="couples-mode-container" class="hidden">
-              <div class="form-group">
-                <label class="form-label">Team A</label>
-                <select id="teamA-couple" class="form-control couple-select"></select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Team B</label>
-                <select id="teamB-couple" class="form-control couple-select"></select>
-              </div>
+              <div class="form-group"><label class="form-label">Team A</label><select id="teamA-couple" class="form-control couple-select"></select></div>
+              <div class="form-group"><label class="form-label">Team B</label><select id="teamB-couple" class="form-control couple-select"></select></div>
             </div>
           </div>
           <div class="card__footer flex gap-16 justify-end">
@@ -233,20 +210,13 @@
         <div class="flex flex-col gap-16" id="matches-list"></div>
       </section>
       
-      <!-- NEW: Match History Section -->
       <section id="history-section" class="hidden">
         <h2 class="text-xl mb-8">Match History</h2>
         <div class="card">
           <div class="card__body">
-            <form id="history-filter-form" class="flex gap-16 items-center">
-              <div class="form-group">
-                <label for="start-date" class="form-label">Start Date</label>
-                <input type="date" id="start-date" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="end-date" class="form-label">End Date</label>
-                <input type="date" id="end-date" class="form-control">
-              </div>
+            <form id="history-filter-form" class="flex gap-16 items-center flex-wrap">
+              <div class="form-group"><label for="start-date" class="form-label">Start Date</label><input type="date" id="start-date" class="form-control"></div>
+              <div class="form-group"><label for="end-date" class="form-label">End Date</label><input type="date" id="end-date" class="form-control"></div>
               <button type="submit" class="btn btn--primary mt-8">Search</button>
             </form>
           </div>
@@ -256,16 +226,12 @@
 
       <section id="rank-player-section" class="hidden">
         <h2 class="text-xl mb-8">Player Rankings</h2>
-        <div class="chart-container" style="position: relative; height: 400px;">
-          <canvas id="playerRankChart"></canvas>
-        </div>
+        <div class="chart-container" style="position: relative; height: 400px;"><canvas id="playerRankChart"></canvas></div>
       </section>
 
       <section id="rank-couples-section" class="hidden">
         <h2 class="text-xl mb-8">Couple Rankings</h2>
-        <div class="chart-container" style="position: relative; height: 400px;">
-          <canvas id="coupleRankChart"></canvas>
-        </div>
+        <div class="chart-container" style="position: relative; height: 400px;"><canvas id="coupleRankChart"></canvas></div>
       </section>
     </main>
     <script src="app.js"></script>
